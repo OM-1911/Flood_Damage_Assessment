@@ -1,0 +1,32 @@
+{% extends 'assessment/base.html' %}
+{% block title %}FloodAI | Home{% endblock %}
+{% block content %}
+<section class="hero container">
+    <div class="hero-copy">
+        <span class="eyebrow">DEEP LEARNING · COMPUTER VISION · GIS-STYLE ANALYSIS</span>
+        <h1>AI-Based Flood <span>Damage Assessment</span></h1>
+        <p>Upload an aerial or satellite image and use a trained U-Net model to segment flooded regions, calculate flood coverage, and estimate severity.</p>
+        <div class="actions">
+            <a class="btn btn-primary" href="{% url 'assessment' %}">Start Assessment →</a>
+            <a class="btn btn-light" href="{% url 'history' %}">View History</a>
+        </div>
+        <div class="mini-stat"><strong>{{ total_assessments }}</strong><span>assessments completed</span></div>
+    </div>
+    <div class="hero-visual">
+        <div class="visual-card">
+            <div class="visual-water">🌊</div>
+            <div><span class="status-dot"></span> AI analysis ready</div>
+            <div class="mock-map"><span></span><span></span><span></span></div>
+            <div class="visual-metrics"><div><b>U-Net</b><small>Segmentation</small></div><div><b>Pixel</b><small>Level analysis</small></div></div>
+        </div>
+    </div>
+</section>
+<section class="section container">
+    <div class="section-title"><span class="eyebrow">WORKFLOW</span><h2>From image to assessment</h2></div>
+    <div class="cards three">
+        <article class="card"><div class="icon">📤</div><h3>1. Upload</h3><p>Provide a JPG, JPEG, PNG, or WEBP aerial/satellite image.</p></article>
+        <article class="card"><div class="icon">🧠</div><h3>2. Segment</h3><p>The U-Net CNN identifies pixels that belong to the flooded region.</p></article>
+        <article class="card"><div class="icon">📊</div><h3>3. Assess</h3><p>See the flood mask, overlay, coverage percentage, and severity.</p></article>
+    </div>
+</section>
+{% endblock %}

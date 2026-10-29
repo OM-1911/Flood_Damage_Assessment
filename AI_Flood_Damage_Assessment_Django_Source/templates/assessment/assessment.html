@@ -1,0 +1,20 @@
+{% extends 'assessment/base.html' %}
+{% block title %}FloodAI | Assessment{% endblock %}
+{% block content %}
+<section class="page container narrow">
+    <div class="section-title center"><span class="eyebrow">AI FLOOD ANALYSIS</span><h1>Assess a Flood Image</h1><p>Upload one image and the trained U-Net model will generate a pixel-level flood map.</p></div>
+    {% if error %}<div class="alert">{{ error }}</div>{% endif %}
+    <form class="upload-card" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="dropzone" for="imageInput">
+            <div class="upload-icon">☁️</div>
+            <h2>Select an image</h2>
+            <p>Click here to browse · Maximum 10 MB</p>
+            <input id="imageInput" type="file" name="image" accept="image/*" required>
+            <span class="btn btn-light">Choose Image</span>
+            <strong id="fileName">No file selected</strong>
+        </label>
+        <button class="btn btn-primary full" type="submit">Analyze with U-Net →</button>
+    </form>
+</section>
+{% endblock %}

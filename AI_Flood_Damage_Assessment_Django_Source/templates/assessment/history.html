@@ -1,0 +1,48 @@
+{% extends 'assessment/base.html' %}
+{% block title %}FloodAI | History{% endblock %}
+{% block content %}
+<section class="page container">
+    <div class="section-title">
+        <span class="eyebrow">ASSESSMENT HISTORY</span>
+        <h1>Recent Results</h1>
+        <p>Your latest AI flood assessments and pixel-level segmentation maps are listed below.</p>
+    </div>
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Flood Coverage</th>
+                    <th>Accuracy</th>
+                    <th>Severity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in assessments %}
+                <tr>
+                    <td><strong>#{{ item.id }}</strong></td>
+                    <td>{{ item.created_at|date:"d M Y, h:i A" }}</td>
+                    <td><b>{{ item.flood_percentage }}%</b></td>
+                    <td><span class="accuracy-tag">{{ item.accuracy }}%</span></td>
+                    <td><span class="pill severity-pill-{{ item.severity|lower }}">{{ item.severity }}</span></td>
+                    <td class="action-cell">
+                        <a href="{% url 'assessment_detail' item.pk %}" class="btn-sm btn-report">View</a>
+                        <a href="{% url 'download_assessment' item.pk %}" class="btn-sm btn-link" title="Download PDF Report">PDF</a>
+                        {% if item.mask_image %}
+                            <a href="{{ item.mask_image.url }}" target="_blank" class="btn-sm btn-link">Mask</a>
+                        {% endif %}
+                        {% if item.result_image %}
+                            <a href="{{ item.result_image.url }}" target="_blank" class="btn-sm btn-link">Overlay</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="empty">No assessments yet. <a href="{% url 'assessment' %}">Analyze your first image</a>.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

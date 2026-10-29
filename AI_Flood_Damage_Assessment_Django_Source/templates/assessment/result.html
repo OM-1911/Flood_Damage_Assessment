@@ -1,0 +1,93 @@
+{% extends 'assessment/base.html' %}
+{% block title %}FloodAI | Result #{{ assessment.id }}{% endblock %}
+{% block content %}
+<section class="page container">
+    <div class="section-title center">
+        <span class="eyebrow">ANALYSIS COMPLETE</span>
+        <h1>Flood Assessment Result</h1>
+        <p>Assessment #{{ assessment.id }} · {{ assessment.created_at|date:"d M Y, h:i A" }}</p>
+    </div>
+    
+    <div class="result-grid">
+        <article class="image-card">
+            <div class="card-heading">
+                <h3>Original Image</h3>
+                <span>INPUT</span>
+            </div>
+            {% if assessment.uploaded_image %}
+                <img src="{{ assessment.uploaded_image.url }}" alt="Uploaded flood image">
+                <div class="card-footer-link">
+                    <a href="{{ assessment.uploaded_image.url }}" target="_blank">View Original ↗</a>
+                </div>
+            {% else %}
+                <div class="image-placeholder">No original image uploaded</div>
+            {% endif %}
+        </article>
+
+        <article class="image-card">
+            <div class="card-heading">
+                <h3>Flood Overlay</h3>
+                <span>AI OUTPUT</span>
+            </div>
+            {% if assessment.result_image %}
+                <img src="{{ assessment.result_image.url }}" alt="AI flood overlay">
+                <div class="card-footer-link">
+                    <a href="{{ assessment.result_image.url }}" target="_blank">View Overlay ↗</a>
+                </div>
+            {% else %}
+                <div class="image-placeholder">Overlay generating...</div>
+            {% endif %}
+        </article>
+    </div>
+
+    <div class="result-grid lower">
+        <article class="image-card mask-card">
+            <div class="card-heading">
+                <h3>Segmentation Mask</h3>
+                <span>PIXEL MAP</span>
+            </div>
+            {% if assessment.mask_image %}
+                <img src="{{ assessment.mask_image.url }}" alt="Flood segmentation mask" class="mask-img">
+                <div class="mask-legend">
+                    <span class="legend-badge"><span class="legend-dot water"></span> Flooded Water</span>
+                    <span class="legend-badge"><span class="legend-dot dry"></span> Dry / Non-Flooded</span>
+                </div>
+                <div class="card-footer-link">
+                    <a href="{{ assessment.mask_image.url }}" target="_blank">View Full Mask ↗</a>
+                </div>
+            {% else %}
+                <div class="image-placeholder">Segmentation mask unavailable</div>
+            {% endif %}
+        </article>
+
+        <article class="summary-card">
+            <span class="eyebrow">ASSESSMENT SUMMARY</span>
+            <div class="big-number">{{ assessment.flood_percentage }}<small>%</small></div>
+            <p class="muted">Estimated flood surface coverage</p>
+
+            <div class="assessment-metrics-grid">
+                <div class="metric-pill">
+                    <span class="metric-label">Prediction Accuracy</span>
+                    <strong class="metric-value">{{ assessment.accuracy }}%</strong>
+                </div>
+                <div class="metric-pill">
+                    <span class="metric-label">Severity Classification</span>
+                    <strong class="metric-value">{{ assessment.severity }}</strong>
+                </div>
+            </div>
+
+            <div class="severity severity-{{ assessment.severity|lower }}">{{ assessment.severity }} Impact</div>
+            <p class="muted">Severity is derived from pixel-level flood segmentation analyzed by the U-Net neural network architecture.</p>
+            
+            <div class="action-buttons">
+                <a class="btn btn-primary full" href="{% url 'download_assessment' assessment.id %}" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Download Assessment PDF Report
+                </a>
+                <a class="btn btn-secondary full" href="{% url 'assessment' %}" style="margin-top: 10px;">Analyze Another Image →</a>
+                <a class="btn btn-light full" href="{% url 'history' %}" style="margin-top: 10px;">View All History</a>
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}
